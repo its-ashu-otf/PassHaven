@@ -6,6 +6,6 @@ A tool that combines powerful password generation and advanced leak detection to
 ## To-Do ✅
 
 - Secure Password Generation
+- Checking for Password Leaks
 - Probably a GUI 
-- Adding EmailCheck
 - Cross platform
