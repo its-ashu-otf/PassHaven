@@ -8,19 +8,17 @@ from password_generator import generate_secure_password, check_password_strength
 from check_leaks import check_password_breach
 
 def display_banner():
-    """
-    Display the PassHaven ASCII banner at the start of the program.
-    """
-    ascii_banner = pyfiglet.figlet_format("PassHaven", font="slant")  # You can change the font here
+    """Display the PassHaven ASCII banner at the start of the program."""
+    ascii_banner = pyfiglet.figlet_format("PassHaven", font="slant")
     print(colored(ascii_banner, "cyan"))
 
-def display_password_info(strength, feedback=None):
+def display_password_info(strength: str, feedback: list[str] | None = None) -> None:
     """
     Display the password's strength and provide feedback for improvement.
     
-    Parameters:
-    strength (str): The password's strength rating.
-    feedback (list[str], optional): A list of suggestions for improving the password. Defaults to None.
+    Args:
+        strength: The password's strength rating.
+        feedback: A list of suggestions for improving the password.
     """
     print(colored(f"Password Strength: {strength}", "cyan"))
     if feedback:
@@ -28,45 +26,44 @@ def display_password_info(strength, feedback=None):
         for suggestion in feedback:
             print(colored(f"- {suggestion}", "yellow"))
 
-def display_breach_warning(breached, info):
+def display_breach_warning(breached: bool, info: str) -> None:
     """
     Display a warning message indicating whether the password has been found in data breaches.
     
-    Parameters:
-    breached (bool): Whether the password has been found in data breaches.
-    info (str): Information about the data breach(s) that contain the password.
+    Args:
+        breached: Whether the password has been found in data breaches.
+        info: Information about the data breach(es) containing the password.
     """
-    if breached:
-        print(colored(f"Warning: This password has been found in {info} data breaches!", "red"))
-    else:
-        print(colored("No known breaches found.", "green"))
+    message = f"Warning: This password has been found in {info} data breaches!" if breached else "No known breaches found."
+    color = "red" if breached else "green"
+    print(colored(message, color))
 
-def generate_additional_suggestions(password):
+def generate_additional_suggestions(password: str) -> list[str]:
     """
     Generate additional suggestions for strengthening the password.
     
-    Parameters:
-    password (str): The password to evaluate.
+    Args:
+        password: The password to evaluate.
     
     Returns:
-    list[str]: A list of suggestions for improving the password's strength.
+        A list of suggestions for improving the password's strength.
     """
     suggestions = []
 
-    # Suggest including special characters if not already included
+    # Check for special characters
     if not any(char in string.punctuation for char in password):
         suggestions.append("Include at least one special character, e.g., !@#$%^&*()")
 
-    # Suggest a longer password if less than 12 characters
+    # Check password length
     if len(password) < 12:
         suggestions.append("Increase the length of the password to at least 12 characters.")
 
-    # Suggest avoiding dictionary words
+    # Check for common patterns
     common_patterns = ["password", "123", "qwerty", "letmein"]
-    if any(word in password.lower() for word in common_patterns):
+    if any(pattern in password.lower() for pattern in common_patterns):
         suggestions.append("Avoid using common phrases or dictionary words like 'password' or '123'.")
 
-    # Suggest using mixed case
+    # Check for mixed case
     if not any(char.isupper() for char in password):
         suggestions.append("Use at least one uppercase letter.")
     if not any(char.islower() for char in password):
@@ -74,56 +71,36 @@ def generate_additional_suggestions(password):
 
     return suggestions
 
-def show_progress(task_name):
+def show_progress(task_name: str) -> None:
     """
     Display a simple progress indicator.
 
-    Parameters:
-    task_name (str): The name of the task being executed.
+    Args:
+        task_name: The name of the task being executed.
     """
     print(colored(f"{task_name}...", "blue"))
     for i in range(4):
         print(colored(f"[{'=' * i}{' ' * (3 - i)}]", "blue"), end="\r")
         time.sleep(0.5)
-    print()  # Ensure the next print starts on a new line
+    print()
 
-def main():
-    """
-    The main entry point of the program.
-    """
-    # Display the PassHaven ASCII banner
+def main() -> None:
+    """The main entry point of the program."""
     display_banner()
 
     logging.basicConfig(level=logging.INFO, format=colored("%(message)s", "magenta"))
     
-    # Adjust the description and argument help messages for clarity
     parser = argparse.ArgumentParser(
         description="PassHaven v0.3 - A Password Security Tool",
         formatter_class=argparse.RawTextHelpFormatter
     )
     
-    # Define arguments and their descriptions
-    parser.add_argument(
-        '-c', '--check', 
-        help='Check if a password has been leaked in a data breach.'
-    )
-    parser.add_argument(
-        '-s', '--strength', 
-        help='Check the strength of a given password.'
-    )
-    parser.add_argument(
-        '-g', '--generate', 
-        action="store_true", 
-        help='Generate a strong, secure password.'
-    )
-    parser.add_argument(
-        '--version', 
-        action='version', 
-        version='%(prog)s v0.3',  # Include version info
-        help='Show the program version.'
-    )
+    parser.add_argument('-c', '--check', help='Check if a password has been leaked in a data breach.')
+    parser.add_argument('-s', '--strength', help='Check the strength of a given password.')
+    parser.add_argument('-g', '--generate', action="store_true", help='Generate a strong, secure password.')
+    parser.add_argument('--version', action='version', version='%(prog)s v0.3', help='Show the program version.')
 
-    # Remove metavar to stop using capitalized arguments in the help message
+    # Remove metavar for cleaner help message
     for action in parser._actions:
         if action.dest in ['check', 'strength']:
             action.metavar = None
@@ -135,40 +112,40 @@ def main():
             generate_password()
         elif args.check:
             show_progress("Checking password")
-            check_password(args.check, check_breaches=True, check_strength=False)  # Disable strength check here
+            check_password(args.check, check_breaches=True, check_strength=False)
         elif args.strength:
-            show_progress("Checking password strength")
-            check_password(args.strength, check_breaches=False, check_strength=True)  # Only strength check
+            show_progress("Checking password strength") 
+            check_password(args.strength, check_breaches=False, check_strength=True)
         else:
             parser.print_help()
     except Exception as e:
         logging.error(colored(f"An error occurred: {e}", "red"))
 
-def generate_password():
-    """
-    Generate a secure password and print it.
-    """
+def generate_password() -> None:
+    """Generate a secure password and print it with analysis."""
     logging.info(colored("Generating a secure password...", "cyan"))
     show_progress("Generating password")
+    
     generated_password = generate_secure_password()
     print(colored(f"Generated Secure Password: {generated_password}", "green"))
-    # Check the strength of the generated password and provide suggestions
+    
     strength, feedback = check_password_strength(generated_password)
     display_password_info(strength, feedback)
+    
     additional_suggestions = generate_additional_suggestions(generated_password)
     if additional_suggestions:
         print(colored("Additional Suggestions for Strengthening Your Password:", "yellow"))
         for suggestion in additional_suggestions:
             print(colored(f"- {suggestion}", "yellow"))
 
-def check_password(password, check_breaches=True, check_strength=True):
+def check_password(password: str, check_breaches: bool = True, check_strength: bool = True) -> None:
     """
     Check the strength and optionally the breaches of a given password.
     
-    Parameters:
-    password (str): The password to check.
-    check_breaches (bool): Whether to check for password breaches. Default is True.
-    check_strength (bool): Whether to check the password strength. Default is True.
+    Args:
+        password: The password to check.
+        check_breaches: Whether to check for password breaches.
+        check_strength: Whether to check the password strength.
     """
     try:
         if check_strength:
