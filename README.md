@@ -26,9 +26,5 @@ PassHaven is a comprehensive tool designed to enhance the security of your onlin
    pip install -r requirements.txt
    ```
 
-## Usage
 
-### Generating a Secure Password
-
-To generate a secure password, run the following command:
 
