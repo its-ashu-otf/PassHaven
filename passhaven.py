@@ -62,7 +62,7 @@ def generate_additional_suggestions(password):
         suggestions.append("Increase the length of the password to at least 12 characters.")
 
     # Suggest avoiding dictionary words
-    common_patterns = [r"password", r"123", r"qwerty", r"letmein"]
+    common_patterns = ["password", "123", "qwerty", "letmein"]
     if any(word in password.lower() for word in common_patterns):
         suggestions.append("Avoid using common phrases or dictionary words like 'password' or '123'.")
 
@@ -85,6 +85,7 @@ def show_progress(task_name):
     for i in range(4):
         print(colored(f"[{'=' * i}{' ' * (3 - i)}]", "blue"), end="\r")
         time.sleep(0.5)
+    print()  # Ensure the next print starts on a new line
 
 def main():
     """
@@ -151,6 +152,14 @@ def generate_password():
     show_progress("Generating password")
     generated_password = generate_secure_password()
     print(colored(f"Generated Secure Password: {generated_password}", "green"))
+    # Check the strength of the generated password and provide suggestions
+    strength, feedback = check_password_strength(generated_password)
+    display_password_info(strength, feedback)
+    additional_suggestions = generate_additional_suggestions(generated_password)
+    if additional_suggestions:
+        print(colored("Additional Suggestions for Strengthening Your Password:", "yellow"))
+        for suggestion in additional_suggestions:
+            print(colored(f"- {suggestion}", "yellow"))
 
 def check_password(password, check_breaches=True, check_strength=True):
     """

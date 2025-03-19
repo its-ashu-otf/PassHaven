@@ -1,0 +1,7 @@
+argparse
+string
+logging
+time
+pyfiglet
+termcolor
+requests
