@@ -4,8 +4,8 @@ import logging
 import time
 import pyfiglet
 from termcolor import colored
-from password_generator import generate_secure_password, check_password_strength
-from check_leaks import check_password_breach
+from tools.password_generator import generate_secure_password, check_password_strength
+from tools.check_leaks import check_password_breach
 
 def display_banner():
     """Display the PassHaven ASCII banner at the start of the program."""
@@ -98,6 +98,7 @@ def main() -> None:
     parser.add_argument('-c', '--check', help='Check if a password has been leaked in a data breach.')
     parser.add_argument('-s', '--strength', help='Check the strength of a given password.')
     parser.add_argument('-g', '--generate', action="store_true", help='Generate a strong, secure password.')
+    parser.add_argument('-a', '--all', action="store_true", help='Perform all checks on the provided password.')
     parser.add_argument('--version', action='version', version='%(prog)s v0.3', help='Show the program version.')
 
     # Remove metavar for cleaner help message
@@ -110,6 +111,9 @@ def main() -> None:
     try:
         if args.generate:
             generate_password()
+        elif args.all and args.check:
+            show_progress("Checking password")
+            check_password(args.check, check_breaches=True, check_strength=True)
         elif args.check:
             show_progress("Checking password")
             check_password(args.check, check_breaches=True, check_strength=False)
