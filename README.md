@@ -27,3 +27,10 @@ PassHaven is a powerful tool designed to enhance the security of your online acc
    ```bash
    pip install -r requirements.txt
    ```
+
+
+## Building 
+
+   ```bash
+   pyinstaller --onefile --hidden-import=pyfiglet --hidden-import=termcolor --hidden-import=requests --name PassHaven passhaven.py
+   ```

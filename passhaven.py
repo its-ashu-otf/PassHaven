@@ -9,9 +9,18 @@ from tools.check_leaks import check_password_breach
 import requests
 
 def display_banner():
-    """Display the PassHaven ASCII banner at the start of the program."""
-    ascii_banner = pyfiglet.figlet_format("PassHaven", font="slant")
-    print(colored(ascii_banner, "cyan"))
+    """Display the PassHaven ASCII banner manually."""
+    banner = """
+    ____                  __  __                     
+   / __ \____ ___________/ / / /___ __   _____  ____ 
+  / /_/ / __ `/ ___/ ___/ /_/ / __ `/ | / / _ \/ __ \\
+ / ____/ /_/ (__  |__  ) __  / /_/ /| |/ /  __/ / / /
+/_/    \__,_/____/____/_/ /_/\__,_/ |___/\___/_/ /_/ 
+                                                     
+    """
+    print(colored(banner, "cyan"))
+
+
 
 def display_password_info(strength: str, feedback: list[str] | None = None) -> None:
     """
