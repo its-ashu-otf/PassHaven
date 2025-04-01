@@ -1,5 +1,15 @@
 import requests
 import hashlib
+import socket
+
+def check_internet_connection():
+    """Check if the internet connection is available."""
+    try:
+        # Try to connect to a well-known host
+        socket.create_connection(("www.google.com", 80))
+        return True
+    except OSError:
+        return False
 
 def check_password_breach(password):
     """
@@ -11,6 +21,9 @@ def check_password_breach(password):
     Returns:
     tuple: A tuple containing a boolean indicating if the password was breached and a message or breach count.
     """
+    if not check_internet_connection():
+        return False, "No internet connection. Please check your connection and try again."
+
     sha1_password = hashlib.sha1(password.encode('utf-8')).hexdigest().upper()
     prefix = sha1_password[:5]
     suffix = sha1_password[5:]

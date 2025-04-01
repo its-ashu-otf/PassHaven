@@ -6,6 +6,7 @@ import pyfiglet
 from termcolor import colored
 from tools.password_generator import generate_secure_password, check_password_strength
 from tools.check_leaks import check_password_breach
+import requests
 
 def display_banner():
     """Display the PassHaven ASCII banner at the start of the program."""
@@ -91,7 +92,7 @@ def main() -> None:
     logging.basicConfig(level=logging.INFO, format=colored("%(message)s", "magenta"))
     
     parser = argparse.ArgumentParser(
-        description="PassHaven v0.3 - A Password Security Tool",
+        description="PassHaven v1.0 - A Password Security Tool",
         formatter_class=argparse.RawTextHelpFormatter
     )
     
@@ -107,6 +108,10 @@ def main() -> None:
             action.metavar = None
 
     args = parser.parse_args()
+
+    if not check_internet_connection():
+        logging.error(colored("No internet connection. Please check your connection and try again.", "red"))
+        return
 
     try:
         if args.generate:
@@ -171,6 +176,14 @@ def check_password(password: str, check_breaches: bool = True, check_strength: b
 
     except Exception as e:
         logging.error(colored(f"Error while processing the password: {e}", "red"))
+
+def check_internet_connection() -> bool:
+    """Check if the internet connection is available."""
+    try:
+        requests.get("http://www.google.com", timeout=5)
+        return True
+    except requests.ConnectionError:
+        return False
 
 if __name__ == "__main__":
     main()

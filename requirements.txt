@@ -1,7 +1,4 @@
-argparse
-string
-logging
-time
 pyfiglet
 termcolor
+argparse
 requests
