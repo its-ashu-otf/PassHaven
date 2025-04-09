@@ -1,9 +1,11 @@
+```bash
     ____                  __  __
    / __ \____ ___________/ / / /___ __   _____  ____
   / /_/ / __ `/ ___/ ___/ /_/ / __ `/ | / / _ \/ __ \
  / ____/ /_/ (__  |__  ) __  / /_/ /| |/ /  __/ / / /
 /_/    \__,_/____/____/_/ /_/\__,_/ |___/\___/_/ /_/
 
+```
 
 PassHaven is a powerful tool designed to enhance the security of your online accounts by integrating robust password generation with advanced breach detection capabilities. This tool ensures that your passwords are not only strong but also have not been compromised in any known data breaches. With PassHaven, you can take control of your online security and protect your sensitive information effectively.
 
